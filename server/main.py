@@ -1,5 +1,6 @@
 import asyncio
 import websockets
+import json
 
 from server import config
 
@@ -21,6 +22,7 @@ class Server:
             await client.send(message)
 
     async def run_server(self):
+        print("Start server")
         await websockets.serve(
             self.client_connector,
             config.HOST,
@@ -29,7 +31,12 @@ class Server:
 
 
 if __name__ == "__main__":
-    server = Server()
-    event_loop = asyncio.get_event_loop()
-    event_loop.run_until_complete(server.run_server())
-    event_loop.run_forever()
+    try:
+        server = Server()
+        event_loop = asyncio.get_event_loop()
+        event_loop.run_until_complete(server.run_server())
+        event_loop.run_forever()
+    except KeyboardInterrupt:
+        ...
+    finally:
+        print("Close server")

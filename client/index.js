@@ -6,14 +6,19 @@ document.addEventListener("DOMContentLoaded", function() {
     ws.onopen = () => {
         console.log("Client connected!")
         send_button.onclick = () => {
-            ws.send(input_msg.value)
+            message = {
+                "message": input_msg.value,
+                "username": localStorage.getItem("login")
+            }
+            ws.send(JSON.stringify(message))
             input_msg.value = ""
         }
 
     }
     ws.onmessage = (message) => {
         let new_message = document.createElement("div");
-        new_message.innerHTML = message.data
+        message_obj = JSON.parse(message.data)
+        new_message.innerHTML = message_obj["username"] + " ~ " + message_obj["message"]
         messages.appendChild(new_message)
         console.log(message.data)
     }
